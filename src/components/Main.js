@@ -19,7 +19,7 @@ function Main({ onEditAvatar, onEditProfile, onAddPlace, onCardClick, onDeleteCl
     }).catch((err) => console.log(err))
   }, [])
 
-  const cardElement = cards.map((cardItem) => (<Card key={cardItem._id} 
+  const cardElements = cards.map((cardItem) => (<Card key={cardItem._id} 
     card={cardItem} onCardClick={onCardClick} onDeleteClick={onDeleteClick} />))
 
   return (
@@ -44,7 +44,7 @@ function Main({ onEditAvatar, onEditProfile, onAddPlace, onCardClick, onDeleteCl
       </section>
 
       <section className="elements">
-        {cardElement}
+        {cardElements}
       </section>
     </main>
   )
