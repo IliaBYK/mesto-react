@@ -7,7 +7,7 @@ import PopupAdd from './PopupAdd';
 import PopupConfirm from './PopupConfirm';
 import PopupEdit from './PopupEdit';
 import PopupAvatar from './PopupAvatar';
-import PopupImage from './PopupImage';
+import ImagePopup from './ImagePopup';
 
 function App() {
 
@@ -64,7 +64,7 @@ function App() {
 
       <PopupAvatar isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} />
 
-      <PopupImage card={selectedCard} onClose={closeAllPopups}></PopupImage>
+      <ImagePopup card={selectedCard} onClose={closeAllPopups}></ImagePopup>
 
       <Footer />
 

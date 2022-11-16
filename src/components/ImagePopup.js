@@ -1,4 +1,4 @@
-function PopupImage({card, onClose}) {
+function ImagePopup({card, onClose}) {
 
   const closePopup = (evt) => {
     if (evt.target.classList.contains('popup') || evt.target.classList.contains('popup__close-button')) {
@@ -17,4 +17,4 @@ function PopupImage({card, onClose}) {
   )
 }
 
-export default PopupImage;
+export default ImagePopup;
