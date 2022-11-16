@@ -13,9 +13,9 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
+    "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -37,7 +37,7 @@
       "last 1 safari version"
     ]
   },
-  "homepage": "https://github.com/IliaBYK/mesto-react",
+  "homepage": ".",
   "devDependencies": {
     "gh-pages": "^4.0.0"
   }
