@@ -56,14 +56,13 @@ class Api {
     })
   }
 
-  putLike(cardId) {
-    return this._getResponse(this._url + '/cards/' + cardId + '/likes', {
-      method: 'PUT',
-      headers: this._headers,
-    })
-  }
-
-  deleteLike(cardId) {
+  changeLikeCardStatus(cardId, isLiked) {
+    if(isLiked) {
+      return this._getResponse(this._url + '/cards/' + cardId + '/likes', {
+        method: 'PUT',
+        headers: this._headers,
+      })
+    }
     return this._getResponse(this._url + '/cards/' + cardId + '/likes', {
       method: 'DELETE',
       headers: this._headers,

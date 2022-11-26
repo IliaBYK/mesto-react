@@ -1,3 +1,4 @@
+import React from "react";
 import PopupWithForm from "./PopupWithForm";
 
 const PopupConfirm = ({ isOpen, onClose }) => {
@@ -6,4 +7,4 @@ const PopupConfirm = ({ isOpen, onClose }) => {
   )
 }
 
-export default PopupConfirm;
+export default React.memo(PopupConfirm);

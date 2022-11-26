@@ -1,3 +1,5 @@
+import React from "react";
+
 function ImagePopup({card, onClose}) {
 
   const closePopup = (evt) => {
@@ -20,4 +22,4 @@ function ImagePopup({card, onClose}) {
   )
 }
 
-export default ImagePopup;
+export default React.memo(ImagePopup);

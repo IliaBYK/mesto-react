@@ -1,6 +1,14 @@
 import React from 'react';
 
-function PopupWithForm({ name, title, children, textButton ='Сохранить', isOpen, onClose }) {
+function PopupWithForm({ 
+  name, 
+  title, 
+  children, 
+  textButton = 'Сохранить', 
+  isOpen, 
+  onClose, 
+  onSubmit 
+}) {
 
   const closePopup = (evt) => {
     if (evt.target.classList.contains('popup') || evt.target.classList.contains('popup__close-button')) {
@@ -12,7 +20,7 @@ function PopupWithForm({ name, title, children, textButton ='Сохранить'
     <div className={`popup popup-${name}` + (isOpen ? " popup_opened" : "")} onClick={closePopup}>
       <div className="popup__container">
         <h2 className="popup__title">{title}</h2>
-        <form name={name} className="popup__form">
+        <form name={name} onSubmit={onSubmit} className="popup__form">
           {children}
           <button className="popup__submit-button button" 
             id="popupEdit__submit-button" 
@@ -27,4 +35,4 @@ function PopupWithForm({ name, title, children, textButton ='Сохранить'
   )
 }
 
-export default PopupWithForm;
+export default React.memo(PopupWithForm);
