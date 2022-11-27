@@ -1,22 +1,26 @@
-import React from 'react';
+import {useEffect, memo} from 'react';
 import PopupWithForm from './PopupWithForm';
+import { useFormAndValidation } from '../hooks/useFormAndValidation';
 
-const EditAvatarPopup = ({ isOpen, onClose, onUpdateAvatar }) => {
+const EditAvatarPopup = ({ isOpen, onClose, onSubmit }) => {
 
-  const avatarRef = React.useRef();
+  /* const avatarRef = React.useRef(); */
 
-  const [avatar, setAvatar] = React.useState('');
+  const { values, handleChange, errors, isValid, resetForm } = useFormAndValidation({
+    avatar: ''
+  })
 
-  function handleSubmit(e) {
-    e.preventDefault();
+  useEffect(() => {
+    if (isOpen) {
+      resetForm();
+    }
+  }, [isOpen, resetForm]);
 
-    onUpdateAvatar({
-      avatar: avatar,
-    });
-  }
+  const inputErrorClassName = (error) =>
+    "popup__input-error" + (error ? " popup__input-error_active" : "");
 
-  function handleChangeAvatar(e) {
-    setAvatar(e.target.value);
+  function handleSubmit() {
+    return onSubmit(values);
   }
 
   return (
@@ -25,24 +29,26 @@ const EditAvatarPopup = ({ isOpen, onClose, onUpdateAvatar }) => {
       title="Обновить аватар" 
       onClose={onClose} 
       isOpen={isOpen} 
+      isValid={isValid}
       onSubmit={handleSubmit}>
+
       <fieldset className="popup__set">
         <label className="popup__field popup__field_place_popup-update">
           <input 
-            ref={avatarRef} 
-            value={avatar} 
-            onChange={handleChangeAvatar} 
+            /* ref={avatarRef}  */
+            value={values.avatar || ''} 
+            onChange={handleChange} 
             type="url" 
             className="popup__input" 
             id="popup-link"
             name="avatar" 
             placeholder="Ссылка на аватар" 
             required />
-          <span className="popup-link-error popup__input-error"></span>
+          <span className={`popup-link-error ${inputErrorClassName(errors.avatar)}`}>{errors.avatar}</span>
         </label>
       </fieldset>
     </PopupWithForm>
   )
 }
 
-export default React.memo(EditAvatarPopup);
+export default memo(EditAvatarPopup);

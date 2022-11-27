@@ -1,4 +1,4 @@
-import React from 'react';
+import {useState, useEffect, memo} from 'react';
 import '../index.css';
 import Header from './Header';
 import Main from './Main';
@@ -13,15 +13,15 @@ import api from '../utils/Api';
 
 function App() {
 
-  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
-  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
-  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
-  const [isConfirmPopupOpen, setIsConfirmPopupOpen] = React.useState(false);
-  const [selectedCard, setSelectedCard] = React.useState(null);
-  const [currentUser, setCurrentUser] = React.useState({});
-  const [cards, setCards] = React.useState([]);
+  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
+  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
+  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
+  const [isConfirmPopupOpen, setIsConfirmPopupOpen] = useState(false);
+  const [selectedCard, setSelectedCard] = useState(null);
+  const [currentUser, setCurrentUser] = useState({});
+  const [cards, setCards] = useState([]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     api.getServerUserInfo()
       .then((userData) => {
         setCurrentUser(userData)
@@ -29,7 +29,7 @@ function App() {
       .catch((err) => console.log(err))
   }, [])
 
-  React.useEffect(() => {
+  useEffect(() => {
     api.getInitialCards()
       .then((cards) => {
         setCards(cards);
@@ -59,9 +59,11 @@ function App() {
   function handleCardLike(card) {
     const isLiked = card.likes.some(i => i._id === currentUser._id);
 
-    api.changeLikeCardStatus(card._id, !isLiked).then((newCard) => {
+    api.changeLikeCardStatus(card._id, !isLiked)
+      .then((newCard) => {
       setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
-    });
+    })
+      .catch((err) => console.error(err.message));;
   }
   
   function handleCardDelete(card) {
@@ -126,19 +128,22 @@ function App() {
         <AddPlacePopup 
           isOpen={isAddPlacePopupOpen} 
           onClose={closeAllPopups} 
-          onAddPlace={handleAddPlaceSubmit}/>
+          onSubmit={handleAddPlaceSubmit}/>
 
         <EditProfilePopup 
           isOpen={isEditProfilePopupOpen} 
           onClose={closeAllPopups} 
-          onUpdateUser={handleUpdateUser}/>
+          onSubmit={handleUpdateUser}/>
 
-        <PopupConfirm isOpen={isConfirmPopupOpen} onClose={closeAllPopups} />
+        <PopupConfirm 
+          isOpen={isConfirmPopupOpen} 
+          onClose={closeAllPopups} 
+          onSubmit={handleCardDelete}/>
 
         <EditAvatarPopup 
           isOpen={isEditAvatarPopupOpen} 
           onClose={closeAllPopups} 
-          onUpdateAvatar={handleUpdateAvatar} 
+          onSubmit={handleUpdateAvatar} 
         />
 
         <ImagePopup card={selectedCard} onClose={closeAllPopups} />
@@ -150,4 +155,4 @@ function App() {
   );
 }
 
-export default App;
+export default memo(App);

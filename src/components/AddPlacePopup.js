@@ -1,26 +1,30 @@
-import React from "react";
+import { useEffect, memo } from "react";
 import PopupWithForm from "./PopupWithForm";
+import { useFormAndValidation } from "../hooks/useFormAndValidation";
 
-const AddPlacePopup = ({ isOpen, onClose, onAddPlace }) => {
+const AddPlacePopup = ({ isOpen, onClose, onSubmit }) => {
 
-  const [name, setName] = React.useState('');
-  const [link, setLink] = React.useState('');
+  /* const { values, handleChange } = useForm({
+    name: '',
+    link: ''
+  }) */
 
-  function handleAddName(e) {
-    setName(e.target.value);
-  }
+  const { values, handleChange, errors, isValid, resetForm } = useFormAndValidation({
+    name: '',
+    link: ''
+  })
 
-  function handleAddLink(e) {
-    setLink(e.target.value);
-  }
+  useEffect(() => {
+    if (isOpen) {
+      resetForm();
+    }
+  }, [isOpen, resetForm]);
 
-  function handleSubmit(e) {
-    e.preventDefault();
+  const inputErrorClassName = (error) =>
+    "popup__input-error" + (error ? " popup__input-error_active" : "");
 
-    onAddPlace({
-      name: name,
-      link: link
-    });
+  function handleSubmit() {
+    return onSubmit(values);
   }
 
   return (
@@ -29,13 +33,14 @@ const AddPlacePopup = ({ isOpen, onClose, onAddPlace }) => {
       title="Новое место" 
       onClose={onClose} 
       isOpen={isOpen} 
+      isValid={isValid}
       onSubmit={handleSubmit}
     >
       <fieldset className="popup__set">
         <label className="popup__field">
           <input 
-            value={name} 
-            onChange={handleAddName} 
+            value={values.name || ''}
+            onChange={handleChange} 
             type="text" 
             className="popup__input" 
             id="popup-place-name" 
@@ -45,13 +50,13 @@ const AddPlacePopup = ({ isOpen, onClose, onAddPlace }) => {
             minLength={2}
             maxLength={30} 
           />
-          <span className="popup-place-name-error popup__input-error"></span>
+          <span className={`popup-place-name-error ${inputErrorClassName(errors.name)}`}>{errors.name}</span>
         </label>
 
         <label className="popup__field">
           <input 
-            value={link} 
-            onChange={handleAddLink} 
+            value={values.link || ''}
+            onChange={handleChange}
             type="url" 
             className="popup__input" 
             id="popup-src" 
@@ -59,11 +64,11 @@ const AddPlacePopup = ({ isOpen, onClose, onAddPlace }) => {
             placeholder="Ссылка на картинку" 
             required 
           />
-          <span className="popup-src-error popup__input-error"></span>
+          <span className={`popup-src-error ${inputErrorClassName(errors.link)}`}>{errors.link}</span>
         </label>
       </fieldset>
     </PopupWithForm>
   )
 }
 
-export default React.memo(AddPlacePopup);
+export default memo(AddPlacePopup);
