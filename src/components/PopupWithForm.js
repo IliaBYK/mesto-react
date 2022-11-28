@@ -32,7 +32,9 @@ function PopupWithForm({
         <h2 className="popup__title">{title}</h2>
         <form name={name} onSubmit={handleSubmit} className="popup__form">
           {children}
-          <button className="popup__submit-button"
+          <button className={
+            "popup__submit-button button" + (isValid ? "" : " button_disabled")
+          }
             disabled={!isValid || isLoading}
             id="popupEdit__submit-button" 
             type="submit" 
