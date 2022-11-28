@@ -13,10 +13,12 @@ import api from '../utils/Api';
 
 function App() {
 
+  const [isLoading, setIsLoading] = useState(false);
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
   const [isConfirmPopupOpen, setIsConfirmPopupOpen] = useState(false);
+  const [deletingCard, setDeletingCard] = useState(null);
   const [selectedCard, setSelectedCard] = useState(null);
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
@@ -52,7 +54,8 @@ function App() {
     setIsAddPlacePopupOpen(true);
   }
 
-  function handleConfirmClick() {
+  function handleConfirmClick(card) {
+    setDeletingCard(card);
     setIsConfirmPopupOpen(true);
   }
 
@@ -67,39 +70,48 @@ function App() {
   }
   
   function handleCardDelete(card) {
+    setIsLoading(true);
     return api.deleteCard(card._id)
       .then(() => {
         const newCards = cards.filter((c) => c._id !== card._id);
         setCards(newCards);
+        closeAllPopups();
       })
-      .catch((err) => console.error(err.message));
+      .catch((err) => console.error(err.message))
+      .finally(() => setIsLoading(false));
   }
 
   function handleAddPlaceSubmit(inputs) {
+    setIsLoading(true);
     return api.postServerCard(inputs)
       .then((newCard) => {
         setCards([newCard, ...cards]);
         closeAllPopups();
       })
-      .catch((err) => console.error(err.message));
+      .catch((err) => console.error(err.message))
+      .finally(() => setIsLoading(false));
   }
 
   function handleUpdateUser(inputs) {
+    setIsLoading(true);
     return api.setServerUserInfo(inputs)
       .then((user) => {
         setCurrentUser(user);
         closeAllPopups();
       })
-      .catch((err) => console.error(err.message));
+      .catch((err) => console.error(err.message))
+      .finally(() => setIsLoading(false));
   }
 
   function handleUpdateAvatar(inputs) {
+    setIsLoading(true);
     return api.setUserAvatar(inputs)
       .then((user) => {
         setCurrentUser(user);
         closeAllPopups();
       })
-      .catch((err) => console.error(err.message));
+      .catch((err) => console.error(err.message))
+      .finally(() => setIsLoading(false));
   }
 
   function closeAllPopups() {
@@ -122,25 +134,30 @@ function App() {
           onCardClick={handleCardClick}
           onDeleteClick={handleConfirmClick}
           onCardLike={handleCardLike}
-          onCardDelete={handleCardDelete}
+          onCardDelete={handleConfirmClick}
           cards={cards}/>
 
         <AddPlacePopup 
+          isLoading={isLoading}
           isOpen={isAddPlacePopupOpen} 
           onClose={closeAllPopups} 
           onSubmit={handleAddPlaceSubmit}/>
 
         <EditProfilePopup 
+          isLoading={isLoading}
           isOpen={isEditProfilePopupOpen} 
           onClose={closeAllPopups} 
           onSubmit={handleUpdateUser}/>
 
         <PopupConfirm 
+          isLoading={isLoading}
           isOpen={isConfirmPopupOpen} 
           onClose={closeAllPopups} 
-          onSubmit={handleCardDelete}/>
+          onSubmit={() => handleCardDelete(deletingCard)}
+          card={deletingCard}/>
 
         <EditAvatarPopup 
+          isLoading={isLoading}
           isOpen={isEditAvatarPopupOpen} 
           onClose={closeAllPopups} 
           onSubmit={handleUpdateAvatar} 

@@ -1,4 +1,4 @@
-import {useState, memo} from 'react';
+import { memo} from 'react';
 
 function PopupWithForm({ 
   name, 
@@ -8,7 +8,8 @@ function PopupWithForm({
   isOpen, 
   onClose, 
   onSubmit ,
-  isValid = true
+  isValid = true,
+  isLoading
 }) {
 
   const closePopup = (evt) => {
@@ -17,13 +18,10 @@ function PopupWithForm({
     }
   }
 
-  const [isLoading, setLoading] = useState(false);
-
   function handleSubmit(e) {
     e.preventDefault();
 
-    setLoading(true);
-    onSubmit().finally(() => setLoading(false));
+    onSubmit();
   }
 
   return (

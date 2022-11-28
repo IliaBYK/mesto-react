@@ -2,12 +2,7 @@ import { useEffect, memo } from "react";
 import PopupWithForm from "./PopupWithForm";
 import { useFormAndValidation } from "../hooks/useFormAndValidation";
 
-const AddPlacePopup = ({ isOpen, onClose, onSubmit }) => {
-
-  /* const { values, handleChange } = useForm({
-    name: '',
-    link: ''
-  }) */
+const AddPlacePopup = ({ isLoading, isOpen, onClose, onSubmit }) => {
 
   const { values, handleChange, errors, isValid, resetForm } = useFormAndValidation({
     name: '',
@@ -35,6 +30,7 @@ const AddPlacePopup = ({ isOpen, onClose, onSubmit }) => {
       isOpen={isOpen} 
       isValid={isValid}
       onSubmit={handleSubmit}
+      isLoading={isLoading}
     >
       <fieldset className="popup__set">
         <label className="popup__field">

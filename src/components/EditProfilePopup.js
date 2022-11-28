@@ -3,18 +3,12 @@ import PopupWithForm from "./PopupWithForm";
 import { useFormAndValidation } from "../hooks/useFormAndValidation";
 import CurrentUserContext from "./context/CurrentUserContext";
 
-const EditProfilePopup = ({ isOpen, onClose, onSubmit }) => {
+const EditProfilePopup = ({ isLoading, isOpen, onClose, onSubmit }) => {
 
   const { values, handleChange, errors, isValid, resetForm } = useFormAndValidation({
     name: '',
     about: ''
   })
-
-  /* useEffect(() => {
-    if (isOpen) {
-      resetForm();
-    }
-  }, [isOpen, resetForm]); */
 
   const currentUser = useContext(CurrentUserContext);
   
@@ -38,7 +32,9 @@ const EditProfilePopup = ({ isOpen, onClose, onSubmit }) => {
       onClose={onClose} 
       isOpen={isOpen}
       onSubmit={handleSubmit}
-      isValid={isValid}>
+      isValid={isValid}
+      isLoading={isLoading}
+      >
 
       <fieldset className="popup__set">
         <label className="popup__field">

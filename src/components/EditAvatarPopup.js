@@ -2,7 +2,7 @@ import {useEffect, memo} from 'react';
 import PopupWithForm from './PopupWithForm';
 import { useFormAndValidation } from '../hooks/useFormAndValidation';
 
-const EditAvatarPopup = ({ isOpen, onClose, onSubmit }) => {
+const EditAvatarPopup = ({ isLoading, isOpen, onClose, onSubmit }) => {
 
   /* const avatarRef = React.useRef(); */
 
@@ -30,7 +30,9 @@ const EditAvatarPopup = ({ isOpen, onClose, onSubmit }) => {
       onClose={onClose} 
       isOpen={isOpen} 
       isValid={isValid}
-      onSubmit={handleSubmit}>
+      onSubmit={handleSubmit}
+      isLoading={isLoading}
+      >
 
       <fieldset className="popup__set">
         <label className="popup__field popup__field_place_popup-update">
